@@ -30,17 +30,11 @@ function toDatetimeLocal(d: Date): string {
   return `${y}-${m}-${day}T${h}:${min}`;
 }
 
-function nowDatetimeLocal(): string {
-  return toDatetimeLocal(new Date());
-}
-
 export default function ResultsTable({ results }: { results: ResultRow[] }) {
   const router = useRouter();
   const [editing, setEditing] = useState<ResultRow | null>(null);
-  const [adding, setAdding] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
   const [filterEmail, setFilterEmail] = useState("");
   const [filterAmount, setFilterAmount] = useState<string>("");
   const [filterDateFrom, setFilterDateFrom] = useState("");
@@ -95,31 +89,11 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
     return params.toString();
   }
 
-  async function handleDelete(id: number) {
-    if (!confirm("Bạn có chắc muốn xóa kết quả này?")) return;
-    setDeleteId(id);
-    setError(null);
-    try {
-      const res = await fetch(`/api/results/${id}`, { method: "DELETE" });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error ?? "Lỗi khi xóa.");
-        return;
-      }
-      router.refresh();
-    } catch {
-      setError("Lỗi kết nối.");
-    } finally {
-      setDeleteId(null);
-    }
-  }
-
   async function handleEditSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!editing) return;
     const form = e.currentTarget;
     const email = (form.elements.namedItem("email") as HTMLInputElement).value.trim();
-    const amount = parseInt((form.elements.namedItem("amount") as HTMLSelectElement).value, 10);
     const spinTime = (form.elements.namedItem("spinTime") as HTMLInputElement).value;
 
     if (!email) {
@@ -135,7 +109,6 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
-          amount,
           spinTime: spinTime ? new Date(spinTime).toISOString() : undefined,
         }),
       });
@@ -145,44 +118,6 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
         return;
       }
       setEditing(null);
-      router.refresh();
-    } catch {
-      setError("Lỗi kết nối.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleAddSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const email = (form.elements.namedItem("add-email") as HTMLInputElement).value.trim();
-    const amount = parseInt((form.elements.namedItem("add-amount") as HTMLSelectElement).value, 10);
-    const spinTime = (form.elements.namedItem("add-spinTime") as HTMLInputElement).value;
-
-    if (!email) {
-      setError("Vui lòng nhập email.");
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/results", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          amount,
-          spinTime: spinTime ? new Date(spinTime).toISOString() : new Date().toISOString(),
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error ?? "Lỗi khi thêm.");
-        return;
-      }
-      setAdding(false);
       router.refresh();
     } catch {
       setError("Lỗi kết nối.");
@@ -262,13 +197,6 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
         >
           Export CSV
         </a>
-        <button
-          type="button"
-          onClick={() => setAdding(true)}
-          className="rounded-xl bg-green-600 px-4 py-2 text-sm font-bold text-white hover:bg-green-700 border-2 border-green-500/50 shadow-lg transition"
-        >
-          Thêm kết quả
-        </button>
       </div>
 
       <div className="overflow-x-auto rounded-xl border-2 border-[#d4af37]/40 bg-white shadow-xl">
@@ -302,23 +230,13 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
                     {new Date(r.spinTime).toLocaleString("vi-VN")}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setEditing(r)}
-                        className="rounded-lg bg-gradient-to-b from-[#c41e3a] to-[#9b1528] px-2 py-1 text-sm font-medium text-white hover:from-[#d42a45] hover:to-[#b01830]"
-                      >
-                        Sửa
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(r.id)}
-                        disabled={deleteId === r.id}
-                        className="rounded bg-red-600 px-2 py-1 text-sm text-white hover:bg-red-700 disabled:opacity-50"
-                      >
-                        {deleteId === r.id ? "…" : "Xóa"}
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setEditing(r)}
+                      className="rounded-lg bg-gradient-to-b from-[#c41e3a] to-[#9b1528] px-2 py-1 text-sm font-medium text-white hover:from-[#d42a45] hover:to-[#b01830]"
+                    >
+                      Sửa
+                    </button>
                   </td>
                 </tr>
               ))
@@ -353,87 +271,11 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
         </div>
       )}
 
-      {adding && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          onClick={() => !loading && setAdding(false)}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="add-title"
-        >
-          <div
-            className="w-full max-w-md rounded-2xl bg-white border-2 border-[#d4af37]/40 p-6 shadow-xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 id="add-title" className="mb-4 text-lg font-bold tet-text-gold">
-              Thêm kết quả
-            </h2>
-            <form onSubmit={handleAddSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="add-email" className="mb-1 block text-sm font-semibold text-[#9b1528]">
-                  Email
-                </label>
-                <input
-                  id="add-email"
-                  name="add-email"
-                  type="email"
-                  required
-                  placeholder="user@example.com"
-                  className="w-full rounded-xl border-2 border-[#d4af37]/40 px-3 py-2 focus:border-[#c41e3a] focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
-                />
-              </div>
-              <div>
-                <label htmlFor="add-amount" className="mb-1 block text-sm font-semibold text-[#9b1528]">
-                  Mệnh giá (VND)
-                </label>
-                <select
-                  id="add-amount"
-                  name="add-amount"
-                  defaultValue={500000}
-                  className="w-full rounded-xl border-2 border-[#d4af37]/40 px-3 py-2 focus:border-[#c41e3a] focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
-                >
-                  <option value={500000}>500.000</option>
-                  <option value={200000}>200.000</option>
-                  <option value={100000}>100.000</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="add-spinTime" className="mb-1 block text-sm font-semibold text-[#9b1528]">
-                  Thời gian
-                </label>
-                <input
-                  id="add-spinTime"
-                  name="add-spinTime"
-                  type="datetime-local"
-                  defaultValue={nowDatetimeLocal()}
-                  className="w-full rounded-xl border-2 border-[#d4af37]/40 px-3 py-2 focus:border-[#c41e3a] focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
-                />
-              </div>
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => !loading && setAdding(false)}
-                  className="rounded-lg border-2 border-[#c41e3a]/50 px-4 py-2 text-[#9b1528] font-medium hover:bg-[#fff9e6]"
-                >
-                  Hủy
-                </button>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="rounded-xl bg-green-600 px-4 py-2 font-bold text-white hover:bg-green-700 disabled:opacity-50 border-2 border-green-500/50"
-                >
-                  {loading ? "Đang thêm…" : "Thêm"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
       {editing && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           onClick={() => !loading && setEditing(null)}
+          aria-label="Đóng"
           role="dialog"
           aria-modal="true"
           aria-labelledby="edit-title"
@@ -463,16 +305,13 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
                 <label htmlFor="edit-amount" className="mb-1 block text-sm font-semibold text-[#9b1528]">
                   Mệnh giá (VND)
                 </label>
-                <select
+                <input
                   id="edit-amount"
-                  name="amount"
-                  defaultValue={editing.amount}
-                  className="w-full rounded-xl border-2 border-[#d4af37]/40 px-3 py-2 focus:border-[#c41e3a] focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
-                >
-                  <option value={500000}>500.000</option>
-                  <option value={200000}>200.000</option>
-                  <option value={100000}>100.000</option>
-                </select>
+                  type="text"
+                  value={formatAmount(editing.amount)}
+                  readOnly
+                  className="w-full rounded-xl border-2 border-[#d4af37]/40 px-3 py-2 bg-gray-100 text-[#9b1528] cursor-not-allowed"
+                />
               </div>
               <div>
                 <label htmlFor="edit-spinTime" className="mb-1 block text-sm font-semibold text-[#9b1528]">

@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
-import { getSession, isAdminEmail } from "@/lib/auth";
+import { getSession, isAdminEmail, canResetPool } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import LogoutButton from "@/components/LogoutButton";
 import ResultsTable from "@/components/ResultsTable";
+import AdminResetButton from "@/components/AdminResetButton";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +28,8 @@ export default async function AdminPage() {
         <h1 className="text-2xl font-bold tet-text-gold">
           Danh sách kết quả vòng quay
         </h1>
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-3 items-center flex-wrap">
+          {canResetPool(session.email) && <AdminResetButton />}
           <span className="text-sm text-[#9b1528] font-medium">{session.email}</span>
           <LogoutButton />
           <Link

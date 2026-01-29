@@ -1,28 +1,50 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-const ALLOWED_DOMAIN = "dssolution.jp";
 const COOKIE_NAME = "lucky_wheel_session";
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "default-secret-change-me"
 );
 
-// Danh sách email admin được phép xem kết quả.
-// Cấu hình qua biến môi trường ADMIN_EMAILS="a@dssolution.jp,b@dssolution.jp"
-const ADMIN_EMAILS: string[] = (process.env.ADMIN_EMAILS || "")
-  .split(",")
+// User thường: chỉ đăng nhập + quay. Cấu hình: ALLOWED_EMAILS="a@dssolution.jp,b@dssolution.jp"
+const ALLOWED_EMAILS: string[] = (process.env.ALLOWED_EMAILS || "")
+  .split(/[,\s\n]+/)
   .map((e) => e.trim().toLowerCase())
   .filter(Boolean);
 
+// Admin: đăng nhập + quay + vào trang admin (danh sách kết quả). Cấu hình: ADMIN_EMAILS="admin@dssolution.jp"
+const ADMIN_EMAILS: string[] = (process.env.ADMIN_EMAILS || "")
+  .split(/[,\s\n]+/)
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
+
+// Chỉ những email này mới thấy và gọi được nút "Xóa hết & reset pool" (thường là subset của ADMIN_EMAILS).
+const RESET_ADMIN_EMAILS: string[] = (process.env.RESET_ADMIN_EMAILS || "")
+  .split(/[,\s\n]+/)
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
+
+/** Được đăng nhập: có trong ALLOWED_EMAILS (user thường) hoặc ADMIN_EMAILS (admin). */
 export function isAllowedEmail(email: string): boolean {
   const normalized = email.trim().toLowerCase();
-  return normalized.endsWith(`@${ALLOWED_DOMAIN}`);
+  return (
+    ALLOWED_EMAILS.includes(normalized) ||
+    ADMIN_EMAILS.includes(normalized)
+  );
 }
 
+/** Chỉ admin mới vào được trang admin (xem/sửa danh sách kết quả). */
 export function isAdminEmail(email: string): boolean {
   const normalized = email.trim().toLowerCase();
   if (ADMIN_EMAILS.length === 0) return false;
   return ADMIN_EMAILS.includes(normalized);
+}
+
+/** Chỉ những email trong RESET_ADMIN_EMAILS mới thấy và gọi được API reset pool. */
+export function canResetPool(email: string): boolean {
+  const normalized = email.trim().toLowerCase();
+  if (RESET_ADMIN_EMAILS.length === 0) return false;
+  return RESET_ADMIN_EMAILS.includes(normalized);
 }
 
 export async function createSession(email: string): Promise<string> {

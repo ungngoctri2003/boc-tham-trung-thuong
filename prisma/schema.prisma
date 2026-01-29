@@ -16,3 +16,14 @@ model SpinResult {
 
   @@map("spin_results")
 }
+
+// Pool 45 giải: gán lần lượt cho từng lượt quay (15x100k, 25x200k, 5x500k đã shuffle)
+model PrizePool {
+  id             Int       @id @default(autoincrement())
+  amount         Int       // VND
+  segmentIndex   Int       @map("segment_index")
+  assignedEmail  String?   @map("assigned_email")
+  assignedAt     DateTime? @map("assigned_at")
+
+  @@map("prize_pool")
+}

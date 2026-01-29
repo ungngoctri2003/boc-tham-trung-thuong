@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     }
     if (!isAllowedEmail(email)) {
       return NextResponse.json(
-        { error: "Vui lòng nhập email công ty (@dssolution.jp)." },
+        { error: "Email không có trong danh sách được phép truy cập." },
         { status: 403 }
       );
     }

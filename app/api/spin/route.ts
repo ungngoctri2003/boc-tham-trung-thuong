@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { pickRandomAmountWithIndex } from "@/lib/wheel";
+import { buildShuffledPool } from "@/lib/wheel";
 
 export async function POST() {
   const session = await getSession();
@@ -20,14 +20,50 @@ export async function POST() {
       { status: 403 }
     );
   }
-  const { amount, segmentIndex } = pickRandomAmountWithIndex();
-  const spinTime = new Date();
-  await prisma.spinResult.create({
-    data: {
-      email: session.email,
-      amount,
-      spinTime,
-    },
+
+  const poolCount = await prisma.prizePool.count();
+  if (poolCount === 0) {
+    const pool = buildShuffledPool();
+    await prisma.prizePool.createMany({
+      data: pool.map((p) => ({
+        amount: p.amount,
+        segmentIndex: p.segmentIndex,
+      })),
+    });
+  }
+
+  const nextPrize = await prisma.prizePool.findFirst({
+    where: { assignedEmail: null },
+    orderBy: { id: "asc" },
   });
-  return NextResponse.json({ amount, segmentIndex, spinTime: spinTime.toISOString() });
+  if (!nextPrize) {
+    return NextResponse.json(
+      { error: "Đã hết giải. Chúc bạn may mắn lần sau!" },
+      { status: 403 }
+    );
+  }
+
+  const spinTime = new Date();
+  await prisma.$transaction([
+    prisma.spinResult.create({
+      data: {
+        email: session.email,
+        amount: nextPrize.amount,
+        spinTime,
+      },
+    }),
+    prisma.prizePool.update({
+      where: { id: nextPrize.id },
+      data: {
+        assignedEmail: session.email,
+        assignedAt: spinTime,
+      },
+    }),
+  ]);
+
+  return NextResponse.json({
+    amount: nextPrize.amount,
+    segmentIndex: nextPrize.segmentIndex,
+    spinTime: spinTime.toISOString(),
+  });
 }
