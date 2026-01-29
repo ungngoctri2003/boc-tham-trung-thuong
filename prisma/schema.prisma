@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model SpinResult {
+  id        Int      @id @default(autoincrement())
+  email     String
+  amount    Int      // VND: 500000, 200000, 100000
+  spinTime  DateTime @map("spin_time")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("spin_results")
+}
