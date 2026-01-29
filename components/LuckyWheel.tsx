@@ -134,7 +134,7 @@ export default function LuckyWheel({ onSpinComplete, disabled }: Props) {
             fontFamily="Inter"
             fontSize={16}
             fontWeight="bold"
-            spinDuration={1.76}
+            spinDuration={1.32}
             pointerProps={{
               style: {
                 filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.35))",
