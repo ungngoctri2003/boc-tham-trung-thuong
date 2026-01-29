@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { pickRandomAmount } from "@/lib/wheel";
+import { pickRandomAmountWithIndex } from "@/lib/wheel";
 
 export async function POST() {
   const session = await getSession();
@@ -20,7 +20,7 @@ export async function POST() {
       { status: 403 }
     );
   }
-  const amount = pickRandomAmount();
+  const { amount, segmentIndex } = pickRandomAmountWithIndex();
   const spinTime = new Date();
   await prisma.spinResult.create({
     data: {
@@ -29,5 +29,5 @@ export async function POST() {
       spinTime,
     },
   });
-  return NextResponse.json({ amount, spinTime: spinTime.toISOString() });
+  return NextResponse.json({ amount, segmentIndex, spinTime: spinTime.toISOString() });
 }

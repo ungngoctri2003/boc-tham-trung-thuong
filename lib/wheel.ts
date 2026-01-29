@@ -11,6 +11,13 @@ export function pickRandomAmount(): number {
   return WHEEL_SEGMENTS[idx];
 }
 
+/** Chọn ngẫu nhiên một ô và trả về cả amount + index (để animation dừng đúng ô). */
+export function pickRandomAmountWithIndex(): { amount: number; segmentIndex: number } {
+  const segmentIndex = Math.floor(Math.random() * WHEEL_SEGMENTS.length);
+  const amount = WHEEL_SEGMENTS[segmentIndex];
+  return { amount, segmentIndex };
+}
+
 /** Index of segment that corresponds to the given amount (for wheel animation). */
 export function getSegmentIndexForAmount(amount: number): number {
   let found = -1;
@@ -23,9 +30,14 @@ export function getSegmentIndexForAmount(amount: number): number {
   return found >= 0 ? found : 0;
 }
 
+/** Format giống popup và bảng kết quả: 500.000, 200.000, 100.000 */
+export function formatAmount(amount: number): string {
+  return amount >= 1000 ? `${(amount / 1000).toFixed(0)}.000` : String(amount);
+}
+
 export function getSegmentsForDisplay(): { value: number; label: string }[] {
   return WHEEL_SEGMENTS.map((value) => ({
     value,
-    label: value >= 1000 ? `${(value / 1000).toFixed(0)}k` : `${value} VND`,
+    label: formatAmount(value),
   }));
 }

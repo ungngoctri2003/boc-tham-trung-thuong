@@ -1,15 +1,12 @@
 "use client";
 
 import Fireworks from "./Fireworks";
+import { formatAmount } from "@/lib/wheel";
 
 type Props = {
   amount: number;
   onClose: () => void;
 };
-
-function formatAmount(amount: number) {
-  return amount >= 1000 ? `${(amount / 1000).toFixed(0)}.000` : String(amount);
-}
 
 export default function CongratulationsPopup({ amount, onClose }: Props) {
   return (

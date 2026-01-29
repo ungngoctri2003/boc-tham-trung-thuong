@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useMemo, useEffect } from "react";
+import { formatAmount } from "@/lib/wheel";
 
 const PAGE_SIZE = 10;
 
@@ -18,10 +19,6 @@ export type ResultRow = {
   amount: number;
   spinTime: Date;
 };
-
-function formatAmount(amount: number) {
-  return amount >= 1000 ? `${(amount / 1000).toFixed(0)}.000` : String(amount);
-}
 
 function toDatetimeLocal(d: Date): string {
   const pad = (n: number) => String(n).padStart(2, "0");
