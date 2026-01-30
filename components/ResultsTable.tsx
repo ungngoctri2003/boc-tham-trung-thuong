@@ -89,6 +89,27 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
     return params.toString();
   }
 
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+
+  async function handleDelete(id: number, email: string) {
+    if (!confirm(`Xóa kết quả của ${email} để cho phép người này quay lại?`)) return;
+    setDeletingId(id);
+    setError(null);
+    try {
+      const res = await fetch(`/api/results/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok) {
+        setError((data as { error?: string }).error ?? "Lỗi khi xóa.");
+        return;
+      }
+      router.refresh();
+    } catch {
+      setError("Lỗi kết nối.");
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   async function handleEditSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!editing) return;
@@ -230,13 +251,24 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
                     {new Date(r.spinTime).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })}
                   </td>
                   <td className="px-4 py-3">
-                    <button
-                      type="button"
-                      onClick={() => setEditing(r)}
-                      className="rounded-lg bg-gradient-to-b from-[#c41e3a] to-[#9b1528] px-2 py-1 text-sm font-medium text-white hover:from-[#d42a45] hover:to-[#b01830]"
-                    >
-                      Sửa
-                    </button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setEditing(r)}
+                        disabled={loading}
+                        className="rounded-lg border-2 border-[#c41e3a]/60 bg-white px-2 py-1 text-sm font-medium text-[#9b1528] hover:bg-[#fff9e6] disabled:opacity-50"
+                      >
+                        Sửa
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(r.id, r.email)}
+                        disabled={loading || deletingId === r.id}
+                        className="rounded-lg bg-red-600 px-2 py-1 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+                      >
+                        {deletingId === r.id ? "Đang xóa…" : "Xóa"}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))

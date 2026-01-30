@@ -84,12 +84,29 @@ export async function DELETE(
   const id = getId(context);
 
   try {
-    await prisma.spinResult.delete({ where: { id } });
-    return NextResponse.json({ success: true });
-  } catch {
+    const row = await prisma.spinResult.findUnique({ where: { id } });
+    if (!row) {
+      return NextResponse.json(
+        { error: "Không tìm thấy kết quả để xóa." },
+        { status: 404 }
+      );
+    }
+    const email = row.email;
+    await prisma.$transaction([
+      prisma.spinResult.delete({ where: { id } }),
+      prisma.prizePool.updateMany({
+        where: { assignedEmail: email },
+        data: { assignedEmail: null, assignedAt: null },
+      }),
+    ]);
+    return NextResponse.json({
+      success: true,
+      message: "Đã xóa kết quả. Người dùng này có thể quay lại.",
+    });
+  } catch (e) {
     return NextResponse.json(
-      { error: "Không tìm thấy kết quả để xóa." },
-      { status: 404 }
+      { error: "Lỗi khi xóa kết quả." },
+      { status: 500 }
     );
   }
 }
