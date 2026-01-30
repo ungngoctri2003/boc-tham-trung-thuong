@@ -54,3 +54,30 @@ E2E_RESET_ADMIN_EMAIL=tri.ung@dssolution.jp npm run e2e:spin
 - Script in từng bước: `[1/45] email → 100k`, ...
 - Cuối cùng in bảng kết quả và phân bố (100k / 200k / 500k).
 - Nếu đúng 15/25/5 và đủ 45 lượt → `[PASS]`. Ngược lại → `[FAIL]` và exit code 1.
+
+---
+
+## Test quay đồng thời (concurrent)
+
+File `e2e/spin-concurrent.ts` kiểm tra **45 user quay cùng lúc**: tất cả thành công, mỗi người một giải, phân bố đúng 15/25/5.
+
+### Chạy
+
+```bash
+npm run e2e:spin:concurrent
+```
+
+Nên reset pool trước khi chạy:
+
+```bash
+# Windows PowerShell
+$env:E2E_RESET_ADMIN_EMAIL="tri.ung@dssolution.jp"; npm run e2e:spin:concurrent
+```
+
+### Biến môi trường
+
+| Biến | Mô tả |
+|------|--------|
+| `E2E_CONCURRENT_COUNT` | Số user quay đồng thời (mặc định: 45) |
+| `E2E_RESET_ADMIN_EMAIL` | Email admin để reset pool trước khi test (nên set) |
+| `E2E_EMAILS` | Danh sách email (cần ít nhất 45 email) |
