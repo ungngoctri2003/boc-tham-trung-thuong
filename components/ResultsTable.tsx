@@ -227,7 +227,7 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
                     {formatAmount(r.amount)}
                   </td>
                   <td className="px-4 py-3 text-[#9b1528]/90">
-                    {new Date(r.spinTime).toLocaleString("vi-VN")}
+                    {new Date(r.spinTime).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })}
                   </td>
                   <td className="px-4 py-3">
                     <button

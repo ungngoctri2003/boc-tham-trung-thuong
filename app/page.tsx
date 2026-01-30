@@ -86,7 +86,7 @@ export default async function HomePage() {
                   : existing.amount}{" "}
                 VND
               </strong>{" "}
-              lúc {new Date(existing.spinTime).toLocaleString("vi-VN")}.
+              lúc {new Date(existing.spinTime).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })}.
             </p>
             <p className="text-amber-800/80 mt-3 text-sm">Mỗi người chỉ được quay một lần.</p>
           </div>
