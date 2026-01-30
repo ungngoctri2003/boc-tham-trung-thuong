@@ -1,42 +1,48 @@
 import { redirect } from "next/navigation";
-import { getSession, isAdminEmail, canResetPool } from "@/lib/auth";
+import { getSession, isAdminEmail, getAllowedEmails } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import LogoutButton from "@/components/LogoutButton";
-import ResultsTable from "@/components/ResultsTable";
-import AdminResetButton from "@/components/AdminResetButton";
+import UsersTable from "@/components/UsersTable";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminPage() {
+export default async function AdminUsersPage() {
   const session = await getSession();
   if (!session || !isAdminEmail(session.email)) {
     redirect("/");
   }
+  const allowedEmails = getAllowedEmails();
   const results = await prisma.spinResult.findMany({
+    where: { email: { in: allowedEmails } },
     orderBy: { spinTime: "asc" },
   });
-  const rows = results.map((r) => ({
-    id: r.id,
-    email: r.email,
-    amount: r.amount,
-    spinTime: r.spinTime,
-  }));
+  const resultByEmail = new Map(
+    results.map((r) => [r.email.toLowerCase(), r])
+  );
+  const rows = allowedEmails.map((email) => {
+    const spin = resultByEmail.get(email.toLowerCase());
+    return {
+      email,
+      hasSpun: !!spin,
+      amount: spin?.amount ?? null,
+      spinTime: spin?.spinTime ?? null,
+    };
+  });
   return (
     <main className="min-h-screen p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <h1 className="text-2xl font-bold tet-text-gold">
-          Kết quả vòng quay
+          Danh sách người dùng
         </h1>
         <div className="flex gap-3 items-center flex-wrap">
-          {canResetPool(session.email) && <AdminResetButton />}
           <span className="text-sm text-[#9b1528] font-medium">{session.email}</span>
           <LogoutButton />
           <Link
-            href="/admin/users"
+            href="/admin"
             className="px-4 py-2 rounded-lg border-2 border-[#c41e3a]/50 text-[#9b1528] font-medium hover:bg-[#fff9e6] hover:border-[#d4af37] transition"
           >
-            Danh sách người dùng
+            Danh sách kết quả
           </Link>
           <Link
             href="/"
@@ -47,9 +53,9 @@ export default async function AdminPage() {
         </div>
       </div>
       <p className="text-[#9b1528]/90 text-sm mb-4">
-        email | mệnh giá (VND) | thời gian — Dùng cho kế toán tổng hợp. Có thể thêm, sửa, xóa từng dòng. Lọc và xuất CSV/Excel theo bộ lọc.
+        Danh sách người được phép quay (ALLOWED_EMAILS) và trạng thái đã quay hay chưa.
       </p>
-      <ResultsTable results={rows} />
+      <UsersTable users={rows} />
     </main>
   );
 }

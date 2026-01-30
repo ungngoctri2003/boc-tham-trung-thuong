@@ -24,6 +24,11 @@ const RESET_ADMIN_EMAILS: string[] = (process.env.RESET_ADMIN_EMAILS || "")
   .map((e) => e.trim().toLowerCase())
   .filter(Boolean);
 
+/** Danh sách email được phép quay (chỉ dùng server-side, ví dụ trang admin danh sách người dùng). */
+export function getAllowedEmails(): string[] {
+  return [...ALLOWED_EMAILS];
+}
+
 /** Được đăng nhập: có trong ALLOWED_EMAILS (user thường) hoặc ADMIN_EMAILS (admin). */
 export function isAllowedEmail(email: string): boolean {
   const normalized = email.trim().toLowerCase();

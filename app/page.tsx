@@ -71,6 +71,12 @@ export default async function HomePage() {
           >
             Danh sách kết quả
           </Link>
+          <Link
+            href="/admin/users"
+            className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
+          >
+            Danh sách người dùng
+          </Link>
           <LogoutButton />
         </div>
         <div className="text-center max-w-md">
@@ -92,12 +98,20 @@ export default async function HomePage() {
         <div className="absolute top-4 right-4 flex items-center gap-3 text-sm text-[#9b1528] font-medium">
           <span>{session.email}</span>
           {isAdminEmail(session.email) && (
-            <Link
-              href="/admin"
-              className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
-            >
-              Danh sách kết quả
-            </Link>
+            <>
+              <Link
+                href="/admin"
+                className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
+              >
+                Danh sách kết quả
+              </Link>
+              <Link
+                href="/admin/users"
+                className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
+              >
+                Danh sách người dùng
+              </Link>
+            </>
           )}
           <LogoutButton />
         </div>
@@ -130,12 +144,20 @@ export default async function HomePage() {
       <div className="absolute top-4 right-4 flex items-center gap-3 text-sm text-[#9b1528] font-medium z-10">
         <span>{session.email}</span>
         {isAdminEmail(session.email) && (
-          <Link
-            href="/admin"
-            className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
-          >
-            Danh sách kết quả
-          </Link>
+          <>
+            <Link
+              href="/admin"
+              className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
+            >
+              Danh sách kết quả
+            </Link>
+            <Link
+              href="/admin/users"
+              className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
+            >
+              Danh sách người dùng
+            </Link>
+          </>
         )}
         <LogoutButton />
       </div>
