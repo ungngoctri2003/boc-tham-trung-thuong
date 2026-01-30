@@ -40,6 +40,13 @@ export function isAdminEmail(email: string): boolean {
   return ADMIN_EMAILS.includes(normalized);
 }
 
+/** Được quay: có trong danh sách quay (ALLOWED_EMAILS) và không phải admin. Admin chỉ quản trị, không tham gia quay. */
+export function canSpin(email: string): boolean {
+  const normalized = email.trim().toLowerCase();
+  if (isAdminEmail(normalized)) return false;
+  return ALLOWED_EMAILS.includes(normalized);
+}
+
 /** Chỉ những email trong RESET_ADMIN_EMAILS mới thấy và gọi được API reset pool. */
 export function canResetPool(email: string): boolean {
   const normalized = email.trim().toLowerCase();

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { getSession, canSpin } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { buildShuffledPool } from "@/lib/wheel";
 
@@ -9,6 +9,12 @@ export async function POST() {
     return NextResponse.json(
       { error: "Vui lòng đăng nhập bằng email công ty." },
       { status: 401 }
+    );
+  }
+  if (!canSpin(session.email)) {
+    return NextResponse.json(
+      { error: "Tài khoản admin không tham gia quay. Chỉ thành viên trong danh sách quay mới được quay." },
+      { status: 403 }
     );
   }
   const existing = await prisma.spinResult.findFirst({

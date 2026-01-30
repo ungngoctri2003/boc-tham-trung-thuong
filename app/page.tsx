@@ -60,6 +60,32 @@ export default async function HomePage() {
     where: { email: session.email },
   });
 
+  if (!existing && isAdminEmail(session.email)) {
+    return (
+      <main className="min-h-screen flex flex-col items-center justify-center p-6">
+        <div className="absolute top-4 right-4 flex items-center gap-3 text-sm text-[#9b1528] font-medium">
+          <span>{session.email}</span>
+          <Link
+            href="/admin"
+            className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
+          >
+            Danh sách kết quả
+          </Link>
+          <LogoutButton />
+        </div>
+        <div className="text-center max-w-md">
+          <TetHeader title="Tài khoản admin" subtitle={session.email} />
+          <div className="bg-white/90 backdrop-blur rounded-2xl border-2 border-[#d4af37]/40 p-6 shadow-xl">
+            <p className="text-[#1f0a0a] mt-2">
+              Bạn là admin, không tham gia quay. Chỉ thành viên trong danh sách quay mới được quay.
+            </p>
+            <p className="text-amber-800/80 mt-3 text-sm">Vào Danh sách kết quả để xem và quản lý.</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   if (existing) {
     return (
       <main className="min-h-screen flex flex-col items-center justify-center p-6">
