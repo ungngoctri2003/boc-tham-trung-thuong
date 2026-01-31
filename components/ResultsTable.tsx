@@ -224,6 +224,7 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
         <table className="w-full text-left">
           <thead className="bg-[#fff9e6] text-[#9b1528]">
             <tr>
+              <th className="px-4 py-3 font-bold w-12">#</th>
               <th className="px-4 py-3 font-bold">Email</th>
               <th className="px-4 py-3 font-bold">Mệnh giá (VND)</th>
               <th className="px-4 py-3 font-bold">Thời gian</th>
@@ -233,16 +234,19 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
           <tbody>
             {paginatedResults.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-4 py-6 text-center text-[#9b1528] font-medium">
+                <td colSpan={5} className="px-4 py-6 text-center text-[#9b1528] font-medium">
                   {results.length === 0 ? "Chưa có kết quả nào." : "Không có kết quả nào trùng bộ lọc."}
                 </td>
               </tr>
             ) : (
-              paginatedResults.map((r) => (
+              paginatedResults.map((r, i) => (
                 <tr
                   key={r.id}
                   className="border-t border-[#d4af37]/30 hover:bg-[#fff9e6]/50"
                 >
+                  <td className="px-4 py-3 text-[#9b1528]/80">
+                    {(safePage - 1) * PAGE_SIZE + i + 1}
+                  </td>
                   <td className="px-4 py-3">{r.email}</td>
                   <td className="px-4 py-3 font-medium">
                     {formatAmount(r.amount)}
