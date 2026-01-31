@@ -37,7 +37,7 @@ export default function AdminResetButton() {
       type="button"
       onClick={handleReset}
       disabled={loading}
-      className="rounded-xl bg-amber-600 px-4 py-2 text-sm font-bold text-white hover:bg-amber-700 disabled:opacity-50 border-2 border-amber-500/50 shadow-lg transition"
+      className="rounded-xl bg-amber-600 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold text-white hover:bg-amber-700 disabled:opacity-50 border-2 border-amber-500/50 shadow-lg transition whitespace-nowrap"
     >
       {loading ? "Đang xử lý…" : "Xóa hết & reset pool"}
     </button>

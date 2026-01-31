@@ -13,9 +13,16 @@
   --tet-bg-pattern: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5c-2 0-4 2-4 4v2c0 2 2 4 4 4s4-2 4-4V9c0-2-2-4-4-4z' fill='%23d4af37' fill-opacity='0.08'/%3E%3Cpath d='M30 47c-2 0-4 2-4 4v2c0 2 2 4 4 4s4-2 4-4v-2c0-2-2-4-4-4z' fill='%23d4af37' fill-opacity='0.08'/%3E%3C/svg%3E");
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
+  /* Safe area for notched phones */
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
 }
 
 @layer utilities {

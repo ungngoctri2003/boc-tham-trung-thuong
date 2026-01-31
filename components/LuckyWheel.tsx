@@ -153,7 +153,7 @@ export default function LuckyWheel({ onSpinComplete, disabled }: Props) {
         type="button"
         onClick={spin}
         disabled={isBusy || disabled}
-        className="px-10 py-4 rounded-xl font-bold text-white bg-gradient-to-b from-[#c41e3a] to-[#9b1528] hover:from-[#d42a45] hover:to-[#b01830] disabled:opacity-50 disabled:cursor-not-allowed shadow-xl border-2 border-[#d4af37]/50 hover:border-[#d4af37] transition-all hover:scale-105 active:scale-100"
+        className="w-full sm:w-auto min-w-[160px] px-6 py-3 sm:px-10 sm:py-4 rounded-xl font-bold text-sm sm:text-base text-white bg-gradient-to-b from-[#c41e3a] to-[#9b1528] hover:from-[#d42a45] hover:to-[#b01830] disabled:opacity-50 disabled:cursor-not-allowed shadow-xl border-2 border-[#d4af37]/50 hover:border-[#d4af37] transition-all hover:scale-105 active:scale-100"
       >
         {loading ? "Đang xử lý..." : mustSpin ? "Đang quay..." : "Quay ngay"}
       </button>

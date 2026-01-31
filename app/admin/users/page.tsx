@@ -30,29 +30,23 @@ export default async function AdminUsersPage() {
     };
   });
   return (
-    <main className="min-h-screen p-6 max-w-4xl mx-auto">
-      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-        <h1 className="text-2xl font-bold tet-text-gold">
+    <main className="min-h-screen p-4 sm:p-6 max-w-4xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold tet-text-gold">
           Danh sách người dùng
         </h1>
-        <div className="flex gap-3 items-center flex-wrap">
-          <span className="text-sm text-[#9b1528] font-medium">{session.email}</span>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <span className="text-xs sm:text-sm text-[#9b1528] font-medium truncate max-w-[160px] sm:max-w-none" title={session.email}>{session.email}</span>
           <LogoutButton />
-          <Link
-            href="/admin"
-            className="px-4 py-2 rounded-lg border-2 border-[#c41e3a]/50 text-[#9b1528] font-medium hover:bg-[#fff9e6] hover:border-[#d4af37] transition"
-          >
-            Danh sách kết quả
+          <Link href="/admin" className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg border-2 border-[#c41e3a]/50 text-[#9b1528] text-sm font-medium hover:bg-[#fff9e6] hover:border-[#d4af37] transition whitespace-nowrap">
+            Kết quả
           </Link>
-          <Link
-            href="/"
-            className="px-4 py-2 rounded-lg border-2 border-[#c41e3a]/50 text-[#9b1528] font-medium hover:bg-[#fff9e6] hover:border-[#d4af37] transition"
-          >
-            Về trang chủ
+          <Link href="/" className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg border-2 border-[#c41e3a]/50 text-[#9b1528] text-sm font-medium hover:bg-[#fff9e6] hover:border-[#d4af37] transition whitespace-nowrap">
+            Trang chủ
           </Link>
         </div>
       </div>
-      <p className="text-[#9b1528]/90 text-sm mb-4">
+      <p className="text-[#9b1528]/90 text-xs sm:text-sm mb-4 break-words">
         Danh sách người được phép quay (ALLOWED_EMAILS) và trạng thái đã quay hay chưa.
       </p>
       <UsersTable users={rows} />

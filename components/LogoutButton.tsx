@@ -19,7 +19,7 @@ export default function LogoutButton() {
       type="button"
       onClick={handleLogout}
       disabled={loading}
-      className="px-3 py-1.5 rounded-lg border-2 border-[#c41e3a]/50 text-[#9b1528] text-sm font-medium hover:bg-[#fff9e6] hover:border-[#d4af37] disabled:opacity-60 transition"
+      className="px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg border-2 border-[#c41e3a]/50 text-[#9b1528] text-xs sm:text-sm font-medium hover:bg-[#fff9e6] hover:border-[#d4af37] disabled:opacity-60 transition whitespace-nowrap"
     >
       {loading ? "Đang thoát..." : "Đăng xuất"}
     </button>

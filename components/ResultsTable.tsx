@@ -155,10 +155,10 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
         </div>
       )}
 
-      <div className="mb-4 rounded-xl border-2 border-[#d4af37]/40 bg-[#fff9e6]/60 p-4">
-        <p className="mb-3 text-sm font-semibold text-[#9b1528]">Lọc</p>
-        <div className="flex flex-wrap items-end gap-3">
-          <div>
+      <div className="mb-4 rounded-xl border-2 border-[#d4af37]/40 bg-[#fff9e6]/60 p-3 sm:p-4">
+        <p className="mb-3 text-xs sm:text-sm font-semibold text-[#9b1528]">Lọc</p>
+        <div className="grid grid-cols-1 sm:flex sm:flex-wrap items-end gap-3">
+          <div className="min-w-0">
             <label htmlFor="filter-email" className="mb-1 block text-xs font-medium text-[#9b1528]">Email</label>
             <input
               id="filter-email"
@@ -166,40 +166,40 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
               placeholder="Chứa..."
               value={filterEmail}
               onChange={(e) => setFilterEmail(e.target.value)}
-              className="rounded-lg border-2 border-[#d4af37]/40 bg-white/80 px-2 py-1.5 text-sm w-48 focus:border-[#c41e3a] focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
+              className="rounded-lg border-2 border-[#d4af37]/40 bg-white/80 px-2 py-1.5 text-sm w-full sm:w-48 focus:border-[#c41e3a] focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
             />
           </div>
-          <div>
+          <div className="min-w-0">
             <label htmlFor="filter-amount" className="mb-1 block text-xs font-medium text-[#9b1528]">Mệnh giá</label>
             <select
               id="filter-amount"
               value={filterAmount}
               onChange={(e) => setFilterAmount(e.target.value)}
-              className="rounded-lg border-2 border-[#d4af37]/40 bg-white/80 px-2 py-1.5 text-sm focus:border-[#c41e3a] focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
+              className="rounded-lg border-2 border-[#d4af37]/40 bg-white/80 px-2 py-1.5 text-sm w-full sm:w-auto focus:border-[#c41e3a] focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
             >
               {AMOUNT_OPTIONS.map((opt) => (
                 <option key={opt.value || "all"} value={opt.value}>{opt.label}</option>
               ))}
             </select>
           </div>
-          <div>
+          <div className="min-w-0">
             <label htmlFor="filter-dateFrom" className="mb-1 block text-xs font-medium text-[#9b1528]">Từ ngày</label>
             <input
               id="filter-dateFrom"
               type="datetime-local"
               value={filterDateFrom}
               onChange={(e) => setFilterDateFrom(e.target.value)}
-              className="rounded-lg border-2 border-[#d4af37]/40 bg-white/80 px-2 py-1.5 text-sm focus:border-[#c41e3a] focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
+              className="rounded-lg border-2 border-[#d4af37]/40 bg-white/80 px-2 py-1.5 text-sm w-full sm:w-auto focus:border-[#c41e3a] focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
             />
           </div>
-          <div>
+          <div className="min-w-0">
             <label htmlFor="filter-dateTo" className="mb-1 block text-xs font-medium text-[#9b1528]">Đến ngày</label>
             <input
               id="filter-dateTo"
               type="datetime-local"
               value={filterDateTo}
               onChange={(e) => setFilterDateTo(e.target.value)}
-              className="rounded-lg border-2 border-[#d4af37]/40 bg-white/80 px-2 py-1.5 text-sm focus:border-[#c41e3a] focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
+              className="rounded-lg border-2 border-[#d4af37]/40 bg-white/80 px-2 py-1.5 text-sm w-full sm:w-auto focus:border-[#c41e3a] focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
             />
           </div>
         </div>
@@ -214,27 +214,27 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
         <a
           href={`/api/results?export=csv${buildExportParams() ? `&${buildExportParams()}` : ""}`}
           download="ket-qua-vong-quay.csv"
-          className="rounded-xl bg-gradient-to-b from-[#c41e3a] to-[#9b1528] px-4 py-2 text-sm font-bold text-white hover:from-[#d42a45] hover:to-[#b01830] border-2 border-[#d4af37]/40 shadow-lg transition"
+          className="w-full sm:w-auto text-center rounded-xl bg-gradient-to-b from-[#c41e3a] to-[#9b1528] px-4 py-2 text-sm font-bold text-white hover:from-[#d42a45] hover:to-[#b01830] border-2 border-[#d4af37]/40 shadow-lg transition"
         >
           Export CSV
         </a>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border-2 border-[#d4af37]/40 bg-white shadow-xl">
-        <table className="w-full text-left">
+      <div className="overflow-x-auto -mx-2 sm:mx-0 rounded-xl border-2 border-[#d4af37]/40 bg-white shadow-xl">
+        <table className="w-full text-left min-w-[580px]">
           <thead className="bg-[#fff9e6] text-[#9b1528]">
             <tr>
-              <th className="px-4 py-3 font-bold w-12">#</th>
-              <th className="px-4 py-3 font-bold">Email</th>
-              <th className="px-4 py-3 font-bold">Mệnh giá (VND)</th>
-              <th className="px-4 py-3 font-bold">Thời gian</th>
-              <th className="px-4 py-3 font-bold w-28">Thao tác</th>
+              <th className="px-2 py-2 sm:px-4 sm:py-3 font-bold w-10 sm:w-12 text-xs sm:text-base">#</th>
+              <th className="px-2 py-2 sm:px-4 sm:py-3 font-bold text-xs sm:text-base">Email</th>
+              <th className="px-2 py-2 sm:px-4 sm:py-3 font-bold text-xs sm:text-base">Mệnh giá (VND)</th>
+              <th className="px-2 py-2 sm:px-4 sm:py-3 font-bold text-xs sm:text-base">Thời gian</th>
+              <th className="px-2 py-2 sm:px-4 sm:py-3 font-bold w-24 sm:w-28 text-xs sm:text-base">Thao tác</th>
             </tr>
           </thead>
           <tbody>
             {paginatedResults.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-4 py-6 text-center text-[#9b1528] font-medium">
+                <td colSpan={5} className="px-2 py-6 sm:px-4 text-center text-xs sm:text-sm text-[#9b1528] font-medium">
                   {results.length === 0 ? "Chưa có kết quả nào." : "Không có kết quả nào trùng bộ lọc."}
                 </td>
               </tr>
@@ -244,23 +244,23 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
                   key={r.id}
                   className="border-t border-[#d4af37]/30 hover:bg-[#fff9e6]/50"
                 >
-                  <td className="px-4 py-3 text-[#9b1528]/80">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 text-xs sm:text-base text-[#9b1528]/80">
                     {(safePage - 1) * PAGE_SIZE + i + 1}
                   </td>
-                  <td className="px-4 py-3">{r.email}</td>
-                  <td className="px-4 py-3 font-medium">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 text-xs sm:text-base break-all">{r.email}</td>
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 text-xs sm:text-base font-medium">
                     {formatAmount(r.amount)}
                   </td>
-                  <td className="px-4 py-3 text-[#9b1528]/90">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 text-xs sm:text-base text-[#9b1528]/90 whitespace-nowrap">
                     {new Date(r.spinTime).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })}
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-wrap items-center gap-2">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3">
+                    <div className="flex flex-wrap items-center gap-1 sm:gap-2">
                       <button
                         type="button"
                         onClick={() => setEditing(r)}
                         disabled={loading}
-                        className="rounded-lg border-2 border-[#c41e3a]/60 bg-white px-2 py-1 text-sm font-medium text-[#9b1528] hover:bg-[#fff9e6] disabled:opacity-50"
+                        className="rounded-lg border-2 border-[#c41e3a]/60 bg-white px-1.5 py-0.5 sm:px-2 sm:py-1 text-xs sm:text-sm font-medium text-[#9b1528] hover:bg-[#fff9e6] disabled:opacity-50"
                       >
                         Sửa
                       </button>
@@ -268,9 +268,9 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
                         type="button"
                         onClick={() => handleDelete(r.id, r.email)}
                         disabled={loading || deletingId === r.id}
-                        className="rounded-lg bg-red-600 px-2 py-1 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+                        className="rounded-lg bg-red-600 px-1.5 py-0.5 sm:px-2 sm:py-1 text-xs sm:text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
                       >
-                        {deletingId === r.id ? "Đang xóa…" : "Xóa"}
+                        {deletingId === r.id ? "…" : "Xóa"}
                       </button>
                     </div>
                   </td>
@@ -287,11 +287,11 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
             type="button"
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={safePage <= 1}
-            className="rounded-lg border-2 border-[#d4af37]/50 px-3 py-1.5 text-sm font-medium text-[#9b1528] hover:bg-[#fff9e6] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-lg border-2 border-[#d4af37]/50 px-2 py-1.5 sm:px-3 sm:py-1.5 text-xs sm:text-sm font-medium text-[#9b1528] hover:bg-[#fff9e6] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Trang trước
+            Trước
           </button>
-          <span className="px-2 text-sm text-[#9b1528] font-medium">
+          <span className="px-1 sm:px-2 text-xs sm:text-sm text-[#9b1528] font-medium">
             Trang {safePage} / {totalPages}
             {" — "}
             {(safePage - 1) * PAGE_SIZE + 1}–{Math.min(safePage * PAGE_SIZE, totalFiltered)} / {totalFiltered}
@@ -300,16 +300,16 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
             type="button"
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
             disabled={safePage >= totalPages}
-            className="rounded-lg border-2 border-[#d4af37]/50 px-3 py-1.5 text-sm font-medium text-[#9b1528] hover:bg-[#fff9e6] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-lg border-2 border-[#d4af37]/50 px-2 py-1.5 sm:px-3 sm:py-1.5 text-xs sm:text-sm font-medium text-[#9b1528] hover:bg-[#fff9e6] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Trang sau
+            Sau
           </button>
         </div>
       )}
 
       {editing && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 sm:p-4"
           onClick={() => !loading && setEditing(null)}
           aria-label="Đóng"
           role="dialog"
@@ -317,7 +317,7 @@ export default function ResultsTable({ results }: { results: ResultRow[] }) {
           aria-labelledby="edit-title"
         >
           <div
-            className="w-full max-w-md rounded-2xl bg-white border-2 border-[#d4af37]/40 p-6 shadow-xl"
+            className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-md rounded-2xl bg-white border-2 border-[#d4af37]/40 p-4 sm:p-6 shadow-xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 id="edit-title" className="mb-4 text-lg font-bold tet-text-gold">

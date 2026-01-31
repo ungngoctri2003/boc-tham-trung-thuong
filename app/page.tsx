@@ -23,7 +23,7 @@ function TetHeader({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
     <div className="text-center mb-6">
       <TetBanner />
-      <h1 className="text-3xl md:text-4xl font-bold tet-text-gold drop-shadow-sm break-words">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tet-text-gold drop-shadow-sm break-words">
         {title}
       </h1>
       {subtitle && (
@@ -37,13 +37,13 @@ export default async function HomePage() {
   const session = await getSession();
   if (!session) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden">
+      <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none opacity-30">
           <div className="absolute top-10 left-10 w-12 h-16 rounded-full bg-[#c41e3a]/20 blur-xl animate-tet-float" />
           <div className="absolute top-20 right-16 w-10 h-14 rounded-full bg-[#d4af37]/25 blur-xl animate-tet-float" style={{ animationDelay: "0.5s" }} />
           <div className="absolute bottom-24 left-1/4 w-8 h-12 rounded-full bg-[#d4af37]/20 blur-xl animate-tet-float" style={{ animationDelay: "1s" }} />
         </div>
-        <div className="relative z-10 w-full max-w-md">
+        <div className="relative z-10 w-full max-w-md px-1">
           <TetHeader
             title="Vòng quay may mắn"
             subtitle="Lì xì đầu năm • Chỉ dành cho DS Solution"
@@ -62,24 +62,24 @@ export default async function HomePage() {
 
   if (!existing && isAdminEmail(session.email)) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-6">
-        <div className="absolute top-4 right-4 flex items-center gap-3 text-sm text-[#9b1528] font-medium">
-          <span>{session.email}</span>
+      <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
+        <div className="absolute top-3 right-3 left-3 sm:left-auto flex flex-wrap items-center justify-end gap-2 text-xs sm:text-sm text-[#9b1528] font-medium">
+          <span className="truncate max-w-[140px] sm:max-w-none" title={session.email}>{session.email}</span>
           <Link
             href="/admin"
-            className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
+            className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-2 py-1 sm:px-3 sm:py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition whitespace-nowrap"
           >
-            Danh sách kết quả
+            Kết quả
           </Link>
           <Link
             href="/admin/users"
-            className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
+            className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-2 py-1 sm:px-3 sm:py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition whitespace-nowrap"
           >
-            Danh sách người dùng
+            Người dùng
           </Link>
           <LogoutButton />
         </div>
-        <div className="text-center max-w-md">
+        <div className="text-center max-w-md mt-12 sm:mt-0">
           <TetHeader title="Tài khoản admin" subtitle={session.email} />
           <div className="bg-white/90 backdrop-blur rounded-2xl border-2 border-[#d4af37]/40 p-6 shadow-xl">
             <p className="text-[#1f0a0a] mt-2">
@@ -94,28 +94,18 @@ export default async function HomePage() {
 
   if (existing) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-6">
-        <div className="absolute top-4 right-4 flex items-center gap-3 text-sm text-[#9b1528] font-medium">
-          <span>{session.email}</span>
+      <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
+        <div className="absolute top-3 right-3 left-3 sm:left-auto flex flex-wrap items-center justify-end gap-2 text-xs sm:text-sm text-[#9b1528] font-medium">
+          <span className="truncate max-w-[140px] sm:max-w-none" title={session.email}>{session.email}</span>
           {isAdminEmail(session.email) && (
             <>
-              <Link
-                href="/admin"
-                className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
-              >
-                Danh sách kết quả
-              </Link>
-              <Link
-                href="/admin/users"
-                className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
-              >
-                Danh sách người dùng
-              </Link>
+              <Link href="/admin" className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-2 py-1 sm:px-3 sm:py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition whitespace-nowrap">Kết quả</Link>
+              <Link href="/admin/users" className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-2 py-1 sm:px-3 sm:py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition whitespace-nowrap">Người dùng</Link>
             </>
           )}
           <LogoutButton />
         </div>
-        <div className="text-center max-w-md">
+        <div className="text-center max-w-md mt-12 sm:mt-0">
           <TetHeader title="Bạn đã quay rồi" />
           <div className="bg-white/90 backdrop-blur rounded-2xl border-2 border-[#d4af37]/40 p-6 shadow-xl">
             <p className="text-[#1f0a0a] mt-2">
@@ -136,32 +126,22 @@ export default async function HomePage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none opacity-25">
         <div className="absolute top-12 right-20 w-14 h-18 rounded-full bg-[#c41e3a]/15 blur-2xl animate-tet-float" />
         <div className="absolute bottom-32 left-20 w-10 h-14 rounded-full bg-[#d4af37]/20 blur-xl animate-tet-float" style={{ animationDelay: "0.7s" }} />
       </div>
-      <div className="absolute top-4 right-4 flex items-center gap-3 text-sm text-[#9b1528] font-medium z-10">
-        <span>{session.email}</span>
+      <div className="absolute top-3 right-3 left-3 sm:left-auto flex flex-wrap items-center justify-end gap-2 text-xs sm:text-sm text-[#9b1528] font-medium z-10">
+        <span className="truncate max-w-[140px] sm:max-w-none" title={session.email}>{session.email}</span>
         {isAdminEmail(session.email) && (
           <>
-            <Link
-              href="/admin"
-              className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
-            >
-              Danh sách kết quả
-            </Link>
-            <Link
-              href="/admin/users"
-              className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-3 py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition"
-            >
-              Danh sách người dùng
-            </Link>
+            <Link href="/admin" className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-2 py-1 sm:px-3 sm:py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition whitespace-nowrap">Kết quả</Link>
+            <Link href="/admin/users" className="rounded-lg border-2 border-[#c41e3a]/50 bg-[#fff9e6] px-2 py-1 sm:px-3 sm:py-1.5 text-[#9b1528] hover:bg-[#d4af37]/20 hover:border-[#d4af37] transition whitespace-nowrap">Người dùng</Link>
           </>
         )}
         <LogoutButton />
       </div>
-      <div className="relative z-10 text-center mb-4">
+      <div className="relative z-10 text-center mb-2 sm:mb-4 mt-14 sm:mt-0 w-full max-w-[min(100%,420px)]">
         <TetHeader title="Vòng quay may mắn" subtitle={session.email} />
       </div>
       <LuckyWheel />
