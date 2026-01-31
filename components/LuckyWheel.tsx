@@ -111,12 +111,12 @@ export default function LuckyWheel({ onSpinComplete, disabled }: Props) {
   const isBusy = mustSpin || loading;
 
   return (
-    <div className="flex flex-col items-center gap-6 relative z-10">
+    <div className="flex flex-col items-center gap-5 sm:gap-6 relative z-10">
       <div className="relative">
         <div
-          className="rounded-full overflow-hidden shadow-2xl border-[10px] border-[#c41e3a]"
+          className="rounded-full overflow-hidden shadow-2xl border-[8px] sm:border-[10px] border-[#c41e3a]"
           style={{
-            boxShadow: "0 0 0 4px #d4af37, 0 8px 30px rgba(0,0,0,0.2)",
+            boxShadow: "0 0 0 3px #d4af37, 0 0 20px rgba(212,175,55,0.25), 0 8px 30px rgba(0,0,0,0.2)",
           }}
         >
           <Wheel
@@ -153,9 +153,9 @@ export default function LuckyWheel({ onSpinComplete, disabled }: Props) {
         type="button"
         onClick={spin}
         disabled={isBusy || disabled}
-        className="w-full sm:w-auto min-w-[160px] px-6 py-3 sm:px-10 sm:py-4 rounded-xl font-bold text-sm sm:text-base text-white bg-gradient-to-b from-[#c41e3a] to-[#9b1528] hover:from-[#d42a45] hover:to-[#b01830] disabled:opacity-50 disabled:cursor-not-allowed shadow-xl border-2 border-[#d4af37]/50 hover:border-[#d4af37] transition-all hover:scale-105 active:scale-100"
+        className="w-full sm:w-auto min-w-[180px] px-8 py-3.5 sm:px-12 sm:py-4 rounded-xl font-bold text-sm sm:text-base text-white bg-gradient-to-b from-[#c41e3a] to-[#9b1528] hover:from-[#d42a45] hover:to-[#b01830] disabled:opacity-50 disabled:cursor-not-allowed shadow-xl border-2 border-[#d4af37]/60 hover:border-[#d4af37] hover:shadow-[0_8px_24px_rgba(196,30,58,0.3)] transition-all hover:scale-105 active:scale-100"
       >
-        {loading ? "Đang xử lý..." : mustSpin ? "Đang quay..." : "Quay ngay"}
+        {loading ? "Đang xử lý..." : mustSpin ? "Đang quay..." : "🎁 Quay nhận lì xì"}
       </button>
     </div>
   );
